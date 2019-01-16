@@ -39,7 +39,7 @@ SSD1306AsciiAvrI2c display;
 
 //other defines
 #define PASSWORD_SIZE  8
-#define PASS_ARR_SIZE  10
+#define PASS_ARR_SIZE  20
 #define STRING_ARRAY_SIZE(x) sizeof(x)/sizeof(x[0])
 
 //RFID STUFF
@@ -48,8 +48,8 @@ unsigned long RFID;
 String readid;
 
 //passwords and cards
-String card1 = "15025321931175"; //card
-String card2 = "228166202115251"; //keychain
+String card1 = ""; //card
+String card2 = ""; //keychain
 byte password[PASSWORD_SIZE] = {3, 3, 3, 3, 3, 3, 3, 3};
 byte pw_input[PASSWORD_SIZE];
 byte curDigit = 0;
@@ -83,13 +83,14 @@ void setup()
     display.println("SD CARD initialization failed!");
     return;
   }
+  bootAnim();
   pinMode(9, INPUT);
   display.clear();
   display.set2X();
   display.setCursor(7, 2);
   display.println("AUTHENTICATE");
-  display.setCursor(10, 5);
-  display.println("________________");
+  display.setCursor(9, 5);
+  display.println("______________");
   display.setCursor(20, 4);
   //rfid
   Keyboard.begin();
@@ -98,6 +99,13 @@ void setup()
 
 void bootAnim() {
   //todo
+  for (int x = 0; x < 127; x++){
+    for (int y = 0; y < 8; y++){
+      display.setCursor(127-x,y);
+      display.print("x");
+      delay(1);
+    }
+  }
 }
 
 void temp()
@@ -200,7 +208,7 @@ void inputPass(int i) {
         display.set2X();
         display.println("PW");
         display.set1X();
-        display.println(passwords[i][1]);
+        display.print(passwords[i][1]);
         display.println("\nPress the button to exit.");
         while (digitalRead(9) != HIGH);
         delay(500);
@@ -210,9 +218,9 @@ void inputPass(int i) {
         return;
         break;
       case 4:
-        Keyboard.print(passwords[i][0]);
+        Keyboard.print(passwords[i][1]);
         Keyboard.press(KEY_RIGHT_SHIFT);
-        for (int i = 0; i < passwords[i][0].length(); i++) {
+        for (int i = 0; i < passwords[i][1].length(); i++) {
           Keyboard.press(KEY_LEFT_ARROW);
           Keyboard.release(KEY_LEFT_ARROW);
         }
@@ -238,16 +246,9 @@ void refreshSDCard() {
   if (secret) {
     for (int i = 0; secret.available(); i++) {
       passwords[i][0] = secret.readStringUntil(';');
-      char *tmp = secret.readStringUntil('\n').c_str();
-      if (rbase64.decode(tmp) == RBASE64_STATUS_OK ) passwords[i][1] = rbase64.result() + '\0';
-      else {
-        passwords[i][1] = tmp;
-        display.println("could not decode password");
-      }
+      passwords[i][1] = secret.readStringUntil('\n');
     }
-
     secret.close();
-
   } else {
     showFail();
   }
@@ -256,7 +257,7 @@ void refreshSDCard() {
 void generateCreds() {
   char *alphabeth = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'?^&/%$£-+";
   const long alphabethLength = 70;//sizeof(alphabeth);
-  String pass = "";
+  char *pass = "";
   display.clear();
   display.set1X();
   display.print("Hold a random\ndirection on \njoystick for randomness");
@@ -267,14 +268,23 @@ void generateCreds() {
   {
     pass += alphabeth[random(0, alphabethLength)];
   }
+  pass += '\0';
   secret = SD.open("secret.txt", FILE_WRITE);
   if (secret) {
-    secret.print("\ngen\;" + pass + "\n");
+    String newPass =  "GEN-";
+    newPass += pass[0];
+    newPass += pass[1];
+    newPass += pass[2];
+    newPass += "\;";
+    newPass += pass;
+    newPass += "\n";
+    secret.print(newPass);
+    delay(100);
     showSuccess();
     secret.close();
   } else showFail();
   delay(500);
-
+  refreshSDCard();
 }
 
 void mouseMode() {
@@ -355,15 +365,15 @@ void loop()
         }
         else {
           display.clear();
-          display.setCursor(5, 2);
+          display.setCursor(7, 2);
           display.println("AUTHENTICATE");
-          display.setCursor(5, 6);
-          display.println("________");
-          display.setCursor(5, 5);
+          display.setCursor(9, 5);
+          display.println("______________");
+          display.setCursor(20, 4);
           display.println("ERROR!");
           delay(400);
           display.setCursor(5, 5);
-          display.println("        ");
+          display.println("                           ");
           display.setCursor(5, 5);
           curDigit = 0;
         }
