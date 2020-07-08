@@ -5,10 +5,15 @@
 ## Libraries needed:
 
 [SSD1306Ascii](https://github.com/greiman/SSD1306Ascii)
+
 [RFID](https://github.com/miguelbalboa/rfid)
+
 [SD](https://github.com/arduino-libraries/SD)
+
 [rBase64](https://github.com/boseji/rBASE64)
+
 [DigitalIO](https://github.com/greiman/DigitalIO)
+
 [SPI](https://www.arduino.cc/en/reference/SPI)
 
 ## Wiring
