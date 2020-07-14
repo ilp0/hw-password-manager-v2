@@ -20,7 +20,7 @@
 
 ### SSD1306 display
 
-| SSD1306 Pin 	| Arduino Pro Micro Pin 	|
+| SSD1306 Pin 	| Pro Micro Pin 	|
 |-	|-	|
 | GND 	| GND 	|
 | VCC 	| 5V 	|
@@ -29,7 +29,7 @@
 
 ### RC522 RFID 
 
-| RC522 	| Arduino Pro Micro Pin 	|
+| RC522 	| Pro Micro Pin 	|
 |-	|-	|
 | SS(component most likely says SDA) 	| 8 	|
 | MISO 	| MISO (14) 	|
@@ -41,7 +41,7 @@
 
 ### Micro SD card reader
 
-| SD Card reader 	| Arduino Pro Micro Pin 	|
+| SD Card reader 	| Pro Micro Pin 	|
 |-	|-	|
 | SS 	| 10 	|
 | MISO 	| MISO (14) 	|
@@ -52,7 +52,7 @@
 
 ### Joystick
 
-| Joystick | Arduino Pro Micro Pin |
+| Joystick | Pro Micro Pin |
 |- |- |
 | VCC | VCC|
 | Y | A1 |
