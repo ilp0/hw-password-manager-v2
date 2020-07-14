@@ -2,6 +2,8 @@
     HARDWARE PASSWORD MANAGER
     Author: Ilpo Loikkanen
 */
+
+
 //base64
 #include <rBase64.h>
 
@@ -9,7 +11,7 @@
 #include <DigitalIO.h>
 
 // RC522 rfid
-#include <RFID.h>
+#include "RFID_lib/rfid.h"
 
 //SD card
 #include <SD.h>
@@ -474,8 +476,3 @@ void loop()
     delay(50);
   }
 }
-
-
-
-
-
